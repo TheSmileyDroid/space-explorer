@@ -1,19 +1,21 @@
-package com.pola.explorer;
+package com.pola.explorer.entities.systems;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.pola.explorer.components.AutoMovementComponent;
-import com.pola.explorer.components.SpriteTexture;
+import com.pola.explorer.entities.Mappers;
+import com.pola.explorer.entities.components.AutoMovementComponent;
+import com.pola.explorer.entities.components.SpriteTexture;
 
 public class AutoMoveSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
 
-    private Family autoMove = Family.all(SpriteTexture.class, AutoMovementComponent.class).get();
+    private final Family autoMove = Family.all(SpriteTexture.class, AutoMovementComponent.class).get();
 
-    public AutoMoveSystem(){}
+    public AutoMoveSystem() {
+    }
 
     @Override
     public void addedToEngine(Engine engine) {
@@ -30,7 +32,7 @@ public class AutoMoveSystem extends EntitySystem {
         for (Entity entity : entities) {
             SpriteTexture sprite = Mappers.spriteTexture.get(entity);
             AutoMovementComponent auto = Mappers.auto.get(entity);
-            sprite.sprite.translate(auto.speed.x*deltaTime,auto.speed.y*deltaTime);
+            sprite.sprite.translate(auto.speed.x * deltaTime, auto.speed.y * deltaTime);
         }
     }
 }

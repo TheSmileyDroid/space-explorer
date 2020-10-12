@@ -1,4 +1,4 @@
-package com.pola.explorer.components;
+package com.pola.explorer.entities.components;
 
 import com.badlogic.ashley.core.Component;
 
