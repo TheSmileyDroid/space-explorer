@@ -6,12 +6,12 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.pola.explorer.entities.Mappers;
+import com.pola.explorer.entities.components.CollisionComponent;
 import com.pola.explorer.entities.components.HalfLifeComponent;
 
 public class HalfLifeSystem extends EntitySystem {
-    private ImmutableArray<Entity> entities;
-
     private final Family halfLifeFamily = Family.all(HalfLifeComponent.class).get();
+    private ImmutableArray<Entity> entities;
 
     @Override
     public void addedToEngine(Engine engine) {
@@ -31,6 +31,8 @@ public class HalfLifeSystem extends EntitySystem {
                 halfLife.time += deltaTime;
             } else {
                 getEngine().removeEntity(entity);
+                CollisionComponent collision = Mappers.collision.get(entity);
+                collision.body.getWorld().destroyBody(collision.body);
                 entity.removeAll();
             }
         }

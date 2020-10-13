@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.pola.explorer.SpaceExplorer;
 
 public class BotaoStyle extends TextButton.TextButtonStyle {
-    public BotaoStyle(SpaceExplorer game){
+    public BotaoStyle(SpaceExplorer game) {
         up = game.skin.getDrawable("button");
         font = game.font;
         down = game.skin.getDrawable("button-over");

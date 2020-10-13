@@ -5,20 +5,21 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.pola.explorer.SpaceExplorer;
 import com.pola.explorer.layout.BotaoStyle;
 
 public class MainMenu implements Screen {
 
     final SpaceExplorer game;
-    private Stage stage;
-    private Table table;
-    private TextButton button;
+    private final Stage stage;
+    private final Table table;
+    private final TextButton button;
 
-    public MainMenu(final SpaceExplorer game){
+    public MainMenu(final SpaceExplorer game) {
         this.game = game;
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -50,8 +51,8 @@ public class MainMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-        if (button.isPressed()){
-            game.setScreen(new GameScreen());
+        if (button.isPressed()) {
+            game.setScreen(new GameScreen(game));
         }
     }
 

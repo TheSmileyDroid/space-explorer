@@ -7,24 +7,23 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
 import com.pola.explorer.Bullet;
 import com.pola.explorer.entities.Mappers;
+import com.pola.explorer.entities.components.CollisionComponent;
 import com.pola.explorer.entities.components.HalfLifeComponent;
 import com.pola.explorer.entities.components.MovementComponent;
 import com.pola.explorer.entities.components.SpriteTexture;
 
 public class GetInputSystem extends EntitySystem {
+    private final Family getterInput = Family.all(MovementComponent.class, CollisionComponent.class).get();
     private ImmutableArray<Entity> entities;
+    private final World world;
 
-    private final Family getterInput = Family.all(MovementComponent.class).get();
-
-    private final Interpolation inter = Interpolation.bounce;
-    private final float duration = 2;
-    private final float elapsed = 0;
-
-    public GetInputSystem() {
+    public GetInputSystem(World world) {
+        this.world = world;
     }
 
     @Override
@@ -39,46 +38,40 @@ public class GetInputSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            for (Entity entity : entities) {
-                MovementComponent movement = Mappers.movement.get(entity);
-                SpriteTexture sprite = Mappers.spriteTexture.get(entity);
-                sprite.sprite.setRotation(-90);
-                sprite.sprite.translate(0, -deltaTime * movement.speed);
+        for (Entity entity : entities) {
+            MovementComponent movement = Mappers.movement.get(entity);
+            SpriteTexture sprite = Mappers.spriteTexture.get(entity);
+            CollisionComponent collision = Mappers.collision.get(entity);
+
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                rotateTo(collision.body, -90);
+                collision.body.setLinearVelocity(0, -movement.speed);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                rotateTo(collision.body, 90);
+                collision.body.setLinearVelocity(0, movement.speed);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                rotateTo(collision.body, 180);
+                collision.body.setLinearVelocity(-movement.speed, 0);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                rotateTo(collision.body, 0);
+                collision.body.setLinearVelocity(movement.speed, 0);
+            } else {
+                collision.body.setLinearVelocity(0, 0);
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                Bullet bullet = new Bullet(sprite.sprite.getRotation(), 15, new Vector2(sprite.sprite.getX(), sprite.sprite.getY()), world);
+                bullet.add(new HalfLifeComponent(5));
+                getEngine().addEntity(bullet);
 
             }
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            for (Entity entity : entities) {
-                MovementComponent movement = Mappers.movement.get(entity);
-                SpriteTexture sprite = Mappers.spriteTexture.get(entity);
-                sprite.sprite.setRotation(90);
-                sprite.sprite.translate(0, deltaTime * movement.speed);
-            }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            for (Entity entity : entities) {
-                MovementComponent movement = Mappers.movement.get(entity);
-                SpriteTexture sprite = Mappers.spriteTexture.get(entity);
-                sprite.sprite.setRotation(-180);
-                sprite.sprite.translate(-deltaTime * movement.speed, 0);
-            }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            for (Entity entity : entities) {
-                MovementComponent movement = Mappers.movement.get(entity);
-                SpriteTexture sprite = Mappers.spriteTexture.get(entity);
-                sprite.sprite.setRotation(0);
-                sprite.sprite.translate(deltaTime * movement.speed, 0);
-            }
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            for (Entity entity : entities) {
-                SpriteTexture sprite = Mappers.spriteTexture.get(entity);
-                Bullet bullet = new Bullet(sprite.sprite.getRotation(), 50, new Vector2(sprite.sprite.getX(), sprite.sprite.getY()));
-                bullet.add(new HalfLifeComponent(5));
-                getEngine().addEntity(bullet);
-            }
-        }
+    }
+
+    public void rotateTo(Body body, int degrees) {
+        float initialAngle = body.getAngle();
+        Gdx.app.log("Angle", String.valueOf(initialAngle));
+        float delta = (float) (Math.toRadians(degrees) - initialAngle);
+        delta += (delta > 180) ? -360 : ((delta < -180) ? 360 : 0);
+        body.setAngularVelocity(delta * 4);
     }
 }
