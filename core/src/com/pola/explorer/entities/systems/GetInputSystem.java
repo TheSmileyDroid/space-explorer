@@ -17,20 +17,36 @@ import com.pola.explorer.entities.components.HalfLifeComponent;
 import com.pola.explorer.entities.components.MovementComponent;
 import com.pola.explorer.entities.components.SpriteTexture;
 
+/**
+ *
+ * @author gabriel
+ */
 public class GetInputSystem extends EntitySystem {
     private final Family getterInput = Family.all(MovementComponent.class, CollisionComponent.class).get();
     private ImmutableArray<Entity> entities;
     private final World world;
 
+    /**
+     *
+     * @param world
+     */
     public GetInputSystem(World world) {
         this.world = world;
     }
 
+    /**
+     *
+     * @param engine
+     */
     @Override
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(getterInput);
     }
 
+    /**
+     *
+     * @param engine
+     */
     @Override
     public void removedFromEngine(Engine engine) {
         entities = engine.getEntitiesFor(getterInput);
@@ -44,34 +60,32 @@ public class GetInputSystem extends EntitySystem {
             CollisionComponent collision = Mappers.collision.get(entity);
 
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                rotateTo(collision.body, -90);
-                collision.body.setLinearVelocity(0, -movement.speed);
+                Vector2 speedDirection = new Vector2(movement.speed, 0)
+                        .rotate(sprite.sprite.getRotation()+180);
+                collision.body.setLinearVelocity(speedDirection);
             } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                rotateTo(collision.body, 90);
-                collision.body.setLinearVelocity(0, movement.speed);
-            } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                rotateTo(collision.body, 180);
-                collision.body.setLinearVelocity(-movement.speed, 0);
-            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                rotateTo(collision.body, 0);
-                collision.body.setLinearVelocity(movement.speed, 0);
+                Vector2 speedDirection = new Vector2(movement.speed, 0)
+                        .rotate(sprite.sprite.getRotation());
+                collision.body.setLinearVelocity(speedDirection);
             } else {
                 collision.body.setLinearVelocity(0, 0);
             }
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                collision.body.setAngularVelocity(2);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                collision.body.setAngularVelocity(-2);
+            } else {
+                collision.body.setAngularVelocity(0);
+            }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                Bullet bullet = new Bullet(sprite.sprite.getRotation(), 15, new Vector2(sprite.sprite.getX(), sprite.sprite.getY()), world);
-                bullet.add(new HalfLifeComponent(5));
+                Vector2 posi = collision.body.getWorldCenter();
+                Vector2 dir = new Vector2(16,0).rotate(sprite.sprite.getRotation());
+                Vector2 nPosi = new Vector2(posi.x+dir.x,posi.y+dir.y);
+                Bullet bullet = new Bullet(sprite.sprite.getRotation(), 80, nPosi, world);
+                bullet.add(new HalfLifeComponent(3));
                 getEngine().addEntity(bullet);
 
             }
         }
-    }
-
-    public void rotateTo(Body body, int degrees) {
-        float initialAngle = body.getAngle();
-        Gdx.app.log("Angle", String.valueOf(initialAngle));
-        float delta = (float) (Math.toRadians(degrees) - initialAngle);
-        delta += (delta > 180) ? -360 : ((delta < -180) ? 360 : 0);
-        body.setAngularVelocity(delta * 4);
     }
 }
