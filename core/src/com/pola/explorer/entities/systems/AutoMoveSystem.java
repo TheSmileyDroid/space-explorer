@@ -30,7 +30,6 @@ public class AutoMoveSystem extends EntitySystem {
     @Override
     public void update(float deltaTime) {
         for (Entity entity : entities) {
-            SpriteTexture sprite = Mappers.spriteTexture.get(entity);
             AutoMovementComponent auto = Mappers.auto.get(entity);
             CollisionComponent collision = Mappers.collision.get(entity);
 

@@ -23,7 +23,7 @@ public class CollisionComponent implements Component {
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
 
-        Fixture fixture = body.createFixture(fixtureDef);
+        body.createFixture(fixtureDef);
 
         body.setUserData(new BodyData(entity, type));
 

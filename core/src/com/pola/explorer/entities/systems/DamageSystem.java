@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.physics.box2d.Contact;
 import com.pola.explorer.entities.Mappers;
 import com.pola.explorer.entities.components.CollisionComponent;
 import com.pola.explorer.entities.components.LifeComponent;
