@@ -6,9 +6,20 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.pola.explorer.scenes.MainMenu;
 
+/**
+ *
+ * @author gabriel
+ */
 public class SpaceExplorer extends Game {
 
+    /**
+     *
+     */
     public Skin skin;
+
+    /**
+     *
+     */
     public BitmapFont font;
 
     @Override

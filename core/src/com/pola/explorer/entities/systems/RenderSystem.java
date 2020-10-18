@@ -10,15 +10,31 @@ import com.pola.explorer.entities.Mappers;
 import com.pola.explorer.entities.components.CollisionComponent;
 import com.pola.explorer.entities.components.SpriteTexture;
 
+/**
+ *
+ * @author gabriel
+ */
 public class RenderSystem extends EntitySystem {
     private final Family desenhavel = Family.all(SpriteTexture.class, CollisionComponent.class).get();
+
+    /**
+     *
+     */
     public SpriteBatch batch;
     private ImmutableArray<Entity> entities;
 
+    /**
+     *
+     * @param batch
+     */
     public RenderSystem(SpriteBatch batch) {
         this.batch = batch;
     }
 
+    /**
+     *
+     * @param engine
+     */
     @Override
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(desenhavel);

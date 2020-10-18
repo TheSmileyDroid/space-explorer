@@ -10,18 +10,33 @@ import com.pola.explorer.entities.components.AutoMovementComponent;
 import com.pola.explorer.entities.components.CollisionComponent;
 import com.pola.explorer.entities.components.SpriteTexture;
 
+/**
+ *
+ * @author gabriel
+ */
 public class AutoMoveSystem extends EntitySystem {
     private final Family autoMove = Family.all(SpriteTexture.class, AutoMovementComponent.class, CollisionComponent.class).get();
     private ImmutableArray<Entity> entities;
 
+    /**
+     *
+     */
     public AutoMoveSystem() {
     }
 
+    /**
+     *
+     * @param engine
+     */
     @Override
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(autoMove);
     }
 
+    /**
+     *
+     * @param engine
+     */
     @Override
     public void removedFromEngine(Engine engine) {
         entities = engine.getEntitiesFor(autoMove);

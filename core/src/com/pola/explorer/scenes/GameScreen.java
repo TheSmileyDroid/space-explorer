@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.pola.explorer.Enemy;
 import com.pola.explorer.Player;
 import com.pola.explorer.SpaceContactListener;
 import com.pola.explorer.SpaceExplorer;
@@ -19,6 +20,10 @@ import com.pola.explorer.entities.SpaceEngine;
 import com.pola.explorer.entities.components.LifeComponent;
 import com.pola.explorer.entities.components.SpriteTexture;
 
+/**
+ *
+ * @author gabriel
+ */
 public class GameScreen implements Screen {
 
     OrthographicCamera camera;
@@ -30,6 +35,10 @@ public class GameScreen implements Screen {
     Matrix4 matrix4;
     SpaceExplorer game;
 
+    /**
+     *
+     * @param game
+     */
     public GameScreen(SpaceExplorer game){
         this.game = game;
     }
@@ -43,6 +52,7 @@ public class GameScreen implements Screen {
         engine = new SpaceEngine(batch, world);
         player = new Player(world);
         engine.addEntity(player);
+        engine.addEntity(new Enemy(world));
         debugRenderer = new Box2DDebugRenderer();
         debugRenderer.setDrawBodies(true);
         matrix4 = new Matrix4(camera.combined);

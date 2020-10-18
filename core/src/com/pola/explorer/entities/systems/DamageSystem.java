@@ -9,10 +9,18 @@ import com.pola.explorer.entities.Mappers;
 import com.pola.explorer.entities.components.CollisionComponent;
 import com.pola.explorer.entities.components.LifeComponent;
 
+/**
+ *
+ * @author gabriel
+ */
 public class DamageSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
     private Family damageFamily = Family.all(LifeComponent.class).get();
 
+    /**
+     *
+     * @param engine
+     */
     @Override
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(damageFamily);

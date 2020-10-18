@@ -9,15 +9,27 @@ import com.pola.explorer.entities.Mappers;
 import com.pola.explorer.entities.components.CollisionComponent;
 import com.pola.explorer.entities.components.HalfLifeComponent;
 
+/**
+ *
+ * @author gabriel
+ */
 public class HalfLifeSystem extends EntitySystem {
     private final Family halfLifeFamily = Family.all(HalfLifeComponent.class).get();
     private ImmutableArray<Entity> entities;
 
+    /**
+     *
+     * @param engine
+     */
     @Override
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(halfLifeFamily);
     }
 
+    /**
+     *
+     * @param engine
+     */
     @Override
     public void removedFromEngine(Engine engine) {
         entities = engine.getEntitiesFor(halfLifeFamily);

@@ -12,6 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.pola.explorer.SpaceExplorer;
 import com.pola.explorer.layout.BotaoStyle;
 
+/**
+ *
+ * @author gabriel
+ */
 public class MainMenu implements Screen {
 
     final SpaceExplorer game;
@@ -19,6 +23,10 @@ public class MainMenu implements Screen {
     private final Table table;
     private final TextButton button;
 
+    /**
+     *
+     * @param game
+     */
     public MainMenu(final SpaceExplorer game) {
         this.game = game;
         stage = new Stage();

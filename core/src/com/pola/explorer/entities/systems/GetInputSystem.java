@@ -11,17 +11,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pola.explorer.Bullet;
 import com.pola.explorer.entities.Mappers;
-import com.pola.explorer.entities.components.CollisionComponent;
-import com.pola.explorer.entities.components.HalfLifeComponent;
-import com.pola.explorer.entities.components.MovementComponent;
-import com.pola.explorer.entities.components.SpriteTexture;
+import com.pola.explorer.entities.components.*;
+
 
 /**
  *
  * @author gabriel
  */
 public class GetInputSystem extends EntitySystem {
-    private final Family getterInput = Family.all(MovementComponent.class, CollisionComponent.class).get();
+    private final Family getterInput =
+            Family.all(
+                    MovementComponent.class,
+                    CollisionComponent.class,
+                    PlayerComponent.class
+            ).get();
     private ImmutableArray<Entity> entities;
     private final World world;
 
@@ -78,7 +81,7 @@ public class GetInputSystem extends EntitySystem {
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 Vector2 posi = collision.body.getWorldCenter();
-                Vector2 dir = new Vector2(16,0).rotate(sprite.sprite.getRotation());
+                Vector2 dir = new Vector2(10,0).rotate(sprite.sprite.getRotation());
                 Vector2 nPosi = new Vector2(posi.x+dir.x,posi.y+dir.y);
                 Bullet bullet = new Bullet(sprite.sprite.getRotation(), 80, nPosi, world);
                 bullet.add(new HalfLifeComponent(3));
